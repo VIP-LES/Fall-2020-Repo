@@ -7,6 +7,9 @@ temperature parameters:
 */
 
 
+//Flag for serial.print
+#define Sprintln(a) (Serial.println(a))
+
 //TMP36 Pin Variables
 
 int tmp0 = 0;
@@ -61,10 +64,11 @@ void loop()                     // run over and over again
   averageTemp = averager(temp0, temp1, temp2, temp3);
   printAvg(averageTemp);
 
-Serial.print("Heating = "); Serial.println(heat);
+Sprintln("Heating = "); Sprintln(heat);
 
 int counter;
 
+  //change activation temperature; Initial values: 10 degrees for individual sensors, 18 degrees averaged (celsius)
   if((temp0 <= 10 || temp1 <= 10 || temp2 <= 10 || temp3 <= 10 || averageTemp <= 18) && !heat)
   {
     digitalWrite(10, HIGH);
@@ -76,7 +80,7 @@ int counter;
   {
     curmill = millis();
     counter = (curmill-startMillis)/1000;
-    Serial.println(counter);
+    Sprintln(counter);
     if( ((curmill - startMillis >= 30000)) || ((averageTemp >= 22)) || ((temp0 >= 20 || temp1 >= 20
 	|| temp2 >= 20 || temp3 >= 20)) )
     {
@@ -91,12 +95,12 @@ int counter;
 
 float tempConvert(float reading)
 {
-  //Serial.println(reading);
+  //Sprintln(reading);
   float voltage = reading * 5.0;
   voltage /= 1023.0;
 
   float temp = (voltage - 0.5)*100;
-  //Serial.println(temp);
+  //Sprintln(temp);
   return temp;
 }
 
@@ -108,10 +112,10 @@ float averager(float temp0, float temp1, float temp2, float temp3)
 
 void printAvg(float avg)
 {
-  Serial.print("Average temperature: ");Serial.print(avg);Serial.println(" Celsius");
+  Sprintln("Average temperature: ");Sprintln(avg);Sprintln(" Celsius");
 }
 
 void printTemp(float temp, int sensor)
 {
-  Serial.print(temp); Serial.print(" Celsius, Sensor #"); Serial.println(sensor);
+  Sprintln(temp); Sprintln(" Celsius, Sensor #"); Sprintln(sensor);
 }
